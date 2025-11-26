@@ -109,11 +109,11 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
               <CardHeader className="text-center">
               <div className="flex justify-center">
                     <img
-                      src="./logo.svg"
-                      alt="Lock Icon"
-                      width={64}
-                      height={64}
-                      className="rounded-lg mb-4 mt-4 cursor-pointer"
+                      src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28"
+                      alt="Veritas Logo"
+                      width={100}
+                      height={100}
+                      className="mb-6 mt-4 cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_20px_rgba(220,38,38,0.4)]"
                       onClick={() => navigate("/")}
                     />
                   </div>

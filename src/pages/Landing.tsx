@@ -27,12 +27,18 @@ export default function Landing() {
         className="fixed top-6 left-0 right-0 z-50 mx-auto max-w-5xl px-6"
       >
         <div className="backdrop-blur-xl bg-background/60 border border-white/10 rounded-full px-6 py-3 flex justify-between items-center shadow-2xl shadow-black/20">
-          <div className="flex items-center gap-2 font-bold text-xl tracking-tighter cursor-pointer" onClick={() => navigate("/")}>
-            <div className="relative">
-              <ShieldCheck className="h-6 w-6 text-primary relative z-10" />
-              <div className="absolute inset-0 bg-primary/50 blur-lg" />
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
+            <div className="relative group">
+              <img 
+                src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
+                alt="Veritas Logo" 
+                className="h-14 w-auto object-contain relative z-10 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)] group-hover:scale-110 transition-transform duration-300" 
+              />
+              <div className="absolute inset-0 bg-primary/30 blur-2xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">Veritas</span>
+            <span className="font-bold text-2xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60 hidden sm:block">
+              Veritas
+            </span>
           </div>
           <div className="flex gap-4 items-center">
             <Button 
@@ -180,8 +186,12 @@ export default function Landing() {
       {/* Footer */}
       <footer className="border-t border-white/10 bg-black py-12 px-6 relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-2 font-bold text-xl">
-            <ShieldCheck className="h-6 w-6 text-primary" />
+          <div className="flex items-center gap-3 font-bold text-xl">
+            <img 
+              src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
+              alt="Veritas Logo" 
+              className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-[0_0_10px_rgba(220,38,38,0.3)]" 
+            />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">Veritas</span>
           </div>
           <div className="flex gap-8 text-sm text-muted-foreground">
