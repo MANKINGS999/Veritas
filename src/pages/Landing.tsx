@@ -3,9 +3,11 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ShieldCheck, AlertTriangle, Eye, Lock, ArrowRight, CheckCircle2, Zap, Globe, Fingerprint, Activity } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useRef, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Landing() {
   const navigate = useNavigate();
+  const { isAuthenticated, signOut } = useAuth();
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
@@ -33,18 +35,28 @@ export default function Landing() {
             </span>
           </div>
           <div className="flex gap-4 items-center">
-            <Button 
-              variant="ghost" 
-              className="hidden md:flex text-muted-foreground hover:text-white hover:bg-white/5 rounded-full"
-              onClick={() => navigate("/auth")}
-            >
-              Sign In
-            </Button>
+            {isAuthenticated ? (
+              <Button 
+                variant="ghost" 
+                className="hidden md:flex text-muted-foreground hover:text-white hover:bg-white/5 rounded-full"
+                onClick={() => signOut()}
+              >
+                Sign Out
+              </Button>
+            ) : (
+              <Button 
+                variant="ghost" 
+                className="hidden md:flex text-muted-foreground hover:text-white hover:bg-white/5 rounded-full"
+                onClick={() => navigate("/auth")}
+              >
+                Sign In
+              </Button>
+            )}
             <Button 
               className="bg-primary hover:bg-primary/90 text-white border-none rounded-full px-6 shadow-[0_0_20px_-5px_var(--color-primary)] hover:shadow-[0_0_30px_-5px_var(--color-primary)] transition-all duration-300"
-              onClick={() => navigate("/auth")}
+              onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
             >
-              Get Started
+              {isAuthenticated ? "Dashboard" : "Get Started"}
             </Button>
           </div>
         </div>
@@ -52,19 +64,7 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 pt-32 pb-24 min-h-screen">
-        {/* Background Logo */}
-        <div className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[500px] max-w-full pointer-events-none select-none -z-10 opacity-20">
-          <img 
-            src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
-            alt="Veritas Background Logo" 
-            className="w-full h-auto mix-blend-screen filter invert hue-rotate-180"
-            style={{ 
-              maskImage: "linear-gradient(to bottom, black 40%, transparent 100%)", 
-              WebkitMaskImage: "linear-gradient(to bottom, black 40%, transparent 100%)" 
-            }}
-          />
-        </div>
-
+        
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -89,12 +89,27 @@ export default function Landing() {
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">AI-Powered Detection Live</span>
           </motion.div>
           
-          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-white leading-[0.9]">
-            <span className="block">Uncover the</span>
-            <span className="block bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40">
-              Hidden Truth
-            </span>
-          </h1>
+          <div className="relative w-full flex flex-col items-center">
+            {/* Logo positioned to emerge from text */}
+            <div className="relative w-[200px] md:w-[300px] -mb-12 md:-mb-16 z-0 pointer-events-none select-none">
+              <img 
+                src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
+                alt="Veritas Background Logo" 
+                className="w-full h-auto mix-blend-screen filter invert hue-rotate-180 opacity-80"
+                style={{ 
+                  maskImage: "linear-gradient(to bottom, black 20%, transparent 100%)", 
+                  WebkitMaskImage: "linear-gradient(to bottom, black 20%, transparent 100%)" 
+                }}
+              />
+            </div>
+
+            <h1 className="relative z-10 text-6xl md:text-8xl font-bold tracking-tighter text-white leading-[0.9]">
+              <span className="block">Uncover the</span>
+              <span className="block bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40">
+                Hidden Truth
+              </span>
+            </h1>
+          </div>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             The world's most advanced AI for detecting <span className="text-white font-medium">deepfakes</span> and <span className="text-white font-medium">misinformation</span>. Verify reality in milliseconds.
@@ -104,10 +119,10 @@ export default function Landing() {
             <Button 
               size="lg" 
               className="group relative bg-white text-black hover:bg-white/90 text-lg px-8 h-14 rounded-full overflow-hidden transition-all"
-              onClick={() => navigate("/auth")}
+              onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              Start Verifying
+              {isAuthenticated ? "Go to Dashboard" : "Start Verifying"}
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button 
@@ -181,7 +196,7 @@ export default function Landing() {
           <Button 
             size="lg" 
             className="bg-white text-black hover:bg-white/90 text-lg px-10 h-16 rounded-full shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)]"
-            onClick={() => navigate("/auth")}
+            onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
           >
             Get Started for Free
           </Button>
