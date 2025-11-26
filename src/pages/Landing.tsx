@@ -28,15 +28,7 @@ export default function Landing() {
       >
         <div className="backdrop-blur-xl bg-background/60 border border-white/10 rounded-full px-6 py-3 flex justify-between items-center shadow-2xl shadow-black/20">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
-            <div className="relative group">
-              <img 
-                src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
-                alt="Veritas Logo" 
-                className="h-14 w-auto object-contain relative z-10 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)] group-hover:scale-110 transition-transform duration-300" 
-              />
-              <div className="absolute inset-0 bg-primary/30 blur-2xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-            </div>
-            <span className="font-bold text-2xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60 hidden sm:block">
+            <span className="font-bold text-2xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60">
               Veritas
             </span>
           </div>
@@ -60,6 +52,19 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 pt-32 pb-24 min-h-screen">
+        {/* Background Logo */}
+        <div className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[500px] max-w-full pointer-events-none select-none -z-10 opacity-20">
+          <img 
+            src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
+            alt="Veritas Background Logo" 
+            className="w-full h-auto mix-blend-screen filter invert hue-rotate-180"
+            style={{ 
+              maskImage: "linear-gradient(to bottom, black 40%, transparent 100%)", 
+              WebkitMaskImage: "linear-gradient(to bottom, black 40%, transparent 100%)" 
+            }}
+          />
+        </div>
+
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -71,7 +76,7 @@ export default function Landing() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-5xl mx-auto space-y-8 flex flex-col items-center"
+          className="max-w-5xl mx-auto space-y-8 flex flex-col items-center relative z-10"
         >
           <motion.div 
             whileHover={{ scale: 1.05 }}
@@ -190,7 +195,7 @@ export default function Landing() {
             <img 
               src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
               alt="Veritas Logo" 
-              className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-[0_0_10px_rgba(220,38,38,0.3)]" 
+              className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-[0_0_10px_rgba(220,38,38,0.3)] mix-blend-screen filter invert hue-rotate-180" 
             />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">Veritas</span>
           </div>

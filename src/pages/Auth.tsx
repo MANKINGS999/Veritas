@@ -113,7 +113,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       alt="Veritas Logo"
                       width={100}
                       height={100}
-                      className="mb-6 mt-4 cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_20px_rgba(220,38,38,0.4)]"
+                      className="mb-6 mt-4 cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_20px_rgba(220,38,38,0.4)] mix-blend-screen filter invert hue-rotate-180"
                       onClick={() => navigate("/")}
                     />
                   </div>
