@@ -32,7 +32,7 @@ export default function Landing() {
               <ShieldCheck className="h-6 w-6 text-primary relative z-10" />
               <div className="absolute inset-0 bg-primary/50 blur-lg" />
             </div>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">TruthGuard</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">Veritas</span>
           </div>
           <div className="flex gap-4 items-center">
             <Button 
@@ -165,7 +165,7 @@ export default function Landing() {
         <div className="max-w-4xl mx-auto relative z-10 text-center space-y-8 p-12 rounded-3xl border border-white/10 bg-black/40 backdrop-blur-xl">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Ready to find the truth?</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Join thousands of journalists, researchers, and truth-seekers using TruthGuard today.
+            Join thousands of journalists, researchers, and truth-seekers using Veritas today.
           </p>
           <Button 
             size="lg" 
@@ -182,7 +182,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-2 font-bold text-xl">
             <ShieldCheck className="h-6 w-6 text-primary" />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">TruthGuard</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">Veritas</span>
           </div>
           <div className="flex gap-8 text-sm text-muted-foreground">
             <a href="#" className="hover:text-white transition-colors">Privacy</a>
@@ -190,7 +190,7 @@ export default function Landing() {
             <a href="#" className="hover:text-white transition-colors">Contact</a>
           </div>
           <div className="text-sm text-muted-foreground">
-            © 2024 TruthGuard Inc.
+            © 2024 Veritas Inc.
           </div>
         </div>
       </footer>

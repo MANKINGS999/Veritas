@@ -1,5 +1,5 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { mutation, query, QueryCtx } from "./_generated/server";
+import { mutation, query, QueryCtx, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 
 /**
@@ -32,6 +32,14 @@ export const getCurrentUser = async (ctx: QueryCtx) => {
   }
   return await ctx.db.get(userId);
 };
+
+export const getUserLocation = internalQuery({
+  args: { userId: v.id("users") },
+  handler: async (ctx, args) => {
+    const user = await ctx.db.get(args.userId);
+    return user?.location;
+  },
+});
 
 export const updateLocation = mutation({
   args: {

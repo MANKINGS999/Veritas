@@ -51,7 +51,7 @@ export default function Dashboard() {
       <div className="max-w-6xl mx-auto space-y-8">
         <header className="flex justify-between items-center border-b pb-6">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">TruthGuard Dashboard</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Veritas Dashboard</h1>
             <p className="text-muted-foreground mt-1">
               Verify news and analyze images with advanced detection.
             </p>

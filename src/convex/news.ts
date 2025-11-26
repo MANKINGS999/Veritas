@@ -23,27 +23,48 @@ export const checkNews = action({
     content: v.string(),
     type: v.union(v.literal("url"), v.literal("text")),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{ result: "real" | "fake"; analysis: string }> => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Unauthorized");
 
+    // Get user location to determine relevant sources
+    const location = (await ctx.runQuery(internal.users.getUserLocation, { userId })) as { latitude: number; longitude: number } | null | undefined;
+    
     // Simulate analysis delay
     await new Promise((resolve) => setTimeout(resolve, 2000));
+    
+    // Determine sources based on location
+    let sources = [
+      "Reuters",
+      "Associated Press", 
+      "Al Jazeera",
+      "BBC World"
+    ];
+
+    if (location) {
+      const { latitude, longitude } = location;
+      
+      // Rough bounding boxes for demonstration
+      const isIndia = latitude >= 8 && latitude <= 37 && longitude >= 68 && longitude <= 97;
+      const isUS = latitude >= 24 && latitude <= 49 && longitude >= -125 && longitude <= -66;
+      const isEurope = latitude >= 36 && latitude <= 71 && longitude >= -10 && longitude <= 40;
+
+      if (isIndia) {
+        sources = ["NDTV", "The Hindu", "Times of India", "Indian Express"];
+      } else if (isUS) {
+        sources = ["CNN", "The New York Times", "Washington Post", "NPR"];
+      } else if (isEurope) {
+        sources = ["BBC", "Deutsche Welle", "France 24", "Euronews"];
+      }
+    }
     
     // Mock logic for demonstration
     const isFake = Math.random() > 0.5;
     const confidence = Math.floor(Math.random() * 30) + 70; // 70-100%
     
-    const sources = [
-      "CNN",
-      "ABC News",
-      "Reuters",
-      "Associated Press"
-    ];
-
     const analysis = isFake 
-      ? "This content shows patterns consistent with known misinformation. Cross-referencing with major networks found no matching verified reports."
-      : "This content has been verified against multiple reliable sources. The information aligns with reports from major news networks.";
+      ? `Analysis against trusted ${location ? 'regional' : 'global'} sources indicates potential misinformation. Cross-referencing with ${sources.slice(0, 2).join(" and ")} found discrepancies.`
+      : `Verified against multiple credible ${location ? 'regional' : 'global'} sources. The information aligns with reports from ${sources.slice(0, 2).join(" and ")}.`;
 
     await ctx.runMutation(internal.news.saveCheck, {
       userId,
