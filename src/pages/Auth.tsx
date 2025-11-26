@@ -109,11 +109,11 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
               <CardHeader className="text-center">
               <div className="flex justify-center">
                     <img
-                      src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28"
+                      src="https://harmless-tapir-303.convex.cloud/api/storage/c989714f-70fe-4287-9b3a-f925f590d191"
                       alt="Veritas Logo"
                       width={100}
                       height={100}
-                      className="mb-6 mt-4 cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_20px_rgba(220,38,38,0.4)] mix-blend-screen filter invert hue-rotate-180"
+                      className="mb-6 mt-4 cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_20px_rgba(220,38,38,0.4)] rounded-full object-cover object-top"
                       onClick={() => navigate("/")}
                     />
                   </div>

@@ -31,9 +31,9 @@ export default function Landing() {
         <div className="backdrop-blur-xl bg-background/60 border border-white/10 rounded-full px-6 py-3 flex justify-between items-center shadow-2xl shadow-black/20">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
             <img 
-              src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
+              src="https://harmless-tapir-303.convex.cloud/api/storage/c989714f-70fe-4287-9b3a-f925f590d191" 
               alt="Veritas Logo" 
-              className="h-8 w-8 object-cover object-top mix-blend-screen filter invert hue-rotate-180 opacity-90 rounded-full"
+              className="h-8 w-8 object-cover object-top opacity-90 rounded-full"
             />
             <span className="font-bold text-2xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60">
               Veritas
@@ -96,15 +96,15 @@ export default function Landing() {
           
           <div className="relative w-full flex flex-col items-center">
             {/* Logo positioned to emerge from text */}
-            <div className="relative w-[200px] md:w-[260px] h-[180px] -mb-20 z-0 pointer-events-none select-none overflow-hidden flex items-start justify-center">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background z-10" />
+            <div className="relative w-[200px] md:w-[260px] h-[180px] -mb-24 z-20 pointer-events-none select-none overflow-hidden flex items-start justify-center">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background z-10" />
               <img 
-                src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
+                src="https://harmless-tapir-303.convex.cloud/api/storage/c989714f-70fe-4287-9b3a-f925f590d191" 
                 alt="Veritas Background Logo" 
-                className="w-full h-[180%] object-cover object-top mix-blend-screen filter invert hue-rotate-180 opacity-80"
+                className="w-full h-[180%] object-cover object-top opacity-90 rounded-full"
                 style={{ 
-                  maskImage: "radial-gradient(circle at center 40%, black 30%, transparent 70%)", 
-                  WebkitMaskImage: "radial-gradient(circle at center 40%, black 30%, transparent 70%)" 
+                  maskImage: "linear-gradient(to bottom, black 30%, transparent 90%)", 
+                  WebkitMaskImage: "linear-gradient(to bottom, black 30%, transparent 90%)" 
                 }}
               />
             </div>
@@ -214,9 +214,9 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3 font-bold text-xl">
             <img 
-              src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
+              src="https://harmless-tapir-303.convex.cloud/api/storage/c989714f-70fe-4287-9b3a-f925f590d191" 
               alt="Veritas Logo" 
-              className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-[0_0_10px_rgba(220,38,38,0.3)] mix-blend-screen filter invert hue-rotate-180" 
+              className="h-10 w-10 object-cover object-top opacity-80 hover:opacity-100 transition-opacity drop-shadow-[0_0_10px_rgba(220,38,38,0.3)] rounded-full" 
             />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">Veritas</span>
           </div>
