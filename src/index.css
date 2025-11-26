@@ -47,42 +47,42 @@
   --radius: 0.75rem;
   
   /* Premium Dark Theme Default */
-  /* Deep Void Black mixed with Red (60% Black, 40% Red feel) */
-  --background: oklch(0.15 0.05 25);
+  /* Deep Void Black mixed with Red (Reduced Red: 80% Black, 20% Red feel) */
+  --background: oklch(0.12 0.02 25);
   /* White text */
   --foreground: oklch(0.98 0 0);
   
   /* Glassy Card Background (Dark Red tint) */
-  --card: oklch(0.18 0.04 25);
+  --card: oklch(0.14 0.02 25);
   --card-foreground: oklch(0.98 0 0);
   
-  --popover: oklch(0.18 0.04 25);
+  --popover: oklch(0.14 0.02 25);
   --popover-foreground: oklch(0.98 0 0);
   
-  /* Vibrant Crimson Red */
-  --primary: oklch(0.55 0.25 25);
+  /* Vibrant Crimson Red (Slightly deeper) */
+  --primary: oklch(0.50 0.20 25);
   --primary-foreground: oklch(1 0 0);
   
   /* Sleek Dark Grey/Red */
-  --secondary: oklch(0.25 0.05 25);
+  --secondary: oklch(0.20 0.03 25);
   --secondary-foreground: oklch(0.98 0 0);
   
   /* Muted Grey/Red */
-  --muted: oklch(0.25 0.05 25);
+  --muted: oklch(0.20 0.03 25);
   --muted-foreground: oklch(0.7 0.02 25);
   
-  --accent: oklch(0.25 0.05 25);
+  --accent: oklch(0.20 0.03 25);
   --accent-foreground: oklch(0.98 0 0);
   
-  --destructive: oklch(0.55 0.25 25);
+  --destructive: oklch(0.50 0.20 25);
   --destructive-foreground: oklch(1 0 0);
   
   /* Subtle Borders */
-  --border: oklch(0.25 0.05 25);
-  --input: oklch(0.25 0.05 25);
-  --ring: oklch(0.55 0.25 25);
+  --border: oklch(0.20 0.03 25);
+  --input: oklch(0.20 0.03 25);
+  --ring: oklch(0.50 0.20 25);
   
-  --chart-1: oklch(0.55 0.25 25);
+  --chart-1: oklch(0.50 0.20 25);
   --chart-2: oklch(0.85 0 0);
   --chart-3: oklch(0.7 0 0);
   --chart-4: oklch(0.6 0.2 25);

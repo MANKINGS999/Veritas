@@ -33,7 +33,7 @@ export default function Landing() {
             <img 
               src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
               alt="Veritas Logo" 
-              className="h-8 w-auto mix-blend-screen filter invert hue-rotate-180 opacity-90"
+              className="h-8 w-8 object-cover object-top mix-blend-screen filter invert hue-rotate-180 opacity-90 rounded-full"
             />
             <span className="font-bold text-2xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60">
               Veritas
@@ -96,14 +96,14 @@ export default function Landing() {
           
           <div className="relative w-full flex flex-col items-center">
             {/* Logo positioned to emerge from text */}
-            <div className="relative w-[180px] md:w-[240px] -mb-16 md:-mb-20 z-0 pointer-events-none select-none">
+            <div className="relative w-[180px] md:w-[240px] h-[160px] -mb-24 z-0 pointer-events-none select-none overflow-hidden flex items-start justify-center">
               <img 
                 src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
                 alt="Veritas Background Logo" 
-                className="w-full h-auto mix-blend-screen filter invert hue-rotate-180 opacity-100"
+                className="w-full h-[200%] object-cover object-top mix-blend-screen filter invert hue-rotate-180 opacity-80"
                 style={{ 
-                  maskImage: "linear-gradient(to bottom, black 40%, transparent 100%)", 
-                  WebkitMaskImage: "linear-gradient(to bottom, black 40%, transparent 100%)" 
+                  maskImage: "radial-gradient(circle at center top, black 20%, transparent 80%)", 
+                  WebkitMaskImage: "radial-gradient(circle at center top, black 20%, transparent 80%)" 
                 }}
               />
             </div>
