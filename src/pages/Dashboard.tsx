@@ -179,7 +179,7 @@ function NewsChecker() {
                     </Badge>
                   </div>
                   
-                  <div className="bg-muted/50 p-3 rounded text-xs text-muted-foreground">
+                  <div className="bg-muted/50 p-3 rounded text-xs text-muted-foreground whitespace-pre-wrap font-mono">
                     {item.analysis}
                   </div>
 
@@ -332,7 +332,7 @@ function ImageChecker() {
                           style={{ width: `${item.probability}%` }}
                         />
                       </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2">
+                      <p className="text-xs text-muted-foreground whitespace-pre-wrap font-mono mt-2">
                         {item.analysis}
                       </p>
                     </div>
