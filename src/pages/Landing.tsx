@@ -30,11 +30,13 @@ export default function Landing() {
       >
         <div className="backdrop-blur-xl bg-background/60 border border-white/10 rounded-full px-6 py-3 flex justify-between items-center shadow-2xl shadow-black/20">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
-            <img 
-              src="https://harmless-tapir-303.convex.cloud/api/storage/c989714f-70fe-4287-9b3a-f925f590d191" 
-              alt="Veritas Logo" 
-              className="h-8 w-8 object-cover object-top opacity-90 rounded-full"
-            />
+            <div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
+              <img 
+                src="https://harmless-tapir-303.convex.cloud/api/storage/c989714f-70fe-4287-9b3a-f925f590d191" 
+                alt="Veritas Logo" 
+                className="h-[140%] w-[140%] object-cover object-top opacity-90 mix-blend-screen"
+              />
+            </div>
             <span className="font-bold text-2xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60">
               Veritas
             </span>
@@ -101,7 +103,7 @@ export default function Landing() {
               <img 
                 src="https://harmless-tapir-303.convex.cloud/api/storage/c989714f-70fe-4287-9b3a-f925f590d191" 
                 alt="Veritas Background Logo" 
-                className="w-full h-[180%] object-cover object-top opacity-90 rounded-full"
+                className="w-full h-[180%] object-cover object-top opacity-90 rounded-full mix-blend-screen"
                 style={{ 
                   maskImage: "linear-gradient(to bottom, black 30%, transparent 90%)", 
                   WebkitMaskImage: "linear-gradient(to bottom, black 30%, transparent 90%)" 
