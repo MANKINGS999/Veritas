@@ -96,14 +96,15 @@ export default function Landing() {
           
           <div className="relative w-full flex flex-col items-center">
             {/* Logo positioned to emerge from text */}
-            <div className="relative w-[180px] md:w-[240px] h-[160px] -mb-24 z-0 pointer-events-none select-none overflow-hidden flex items-start justify-center">
+            <div className="relative w-[200px] md:w-[260px] h-[180px] -mb-20 z-0 pointer-events-none select-none overflow-hidden flex items-start justify-center">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background z-10" />
               <img 
                 src="https://harmless-tapir-303.convex.cloud/api/storage/3b51f375-c5e4-446c-a782-7fb535248c28" 
                 alt="Veritas Background Logo" 
-                className="w-full h-[200%] object-cover object-top mix-blend-screen filter invert hue-rotate-180 opacity-80"
+                className="w-full h-[180%] object-cover object-top mix-blend-screen filter invert hue-rotate-180 opacity-80"
                 style={{ 
-                  maskImage: "radial-gradient(circle at center top, black 20%, transparent 80%)", 
-                  WebkitMaskImage: "radial-gradient(circle at center top, black 20%, transparent 80%)" 
+                  maskImage: "radial-gradient(circle at center 40%, black 30%, transparent 70%)", 
+                  WebkitMaskImage: "radial-gradient(circle at center 40%, black 30%, transparent 70%)" 
                 }}
               />
             </div>
