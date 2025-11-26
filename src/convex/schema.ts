@@ -30,14 +30,32 @@ const schema = defineSchema(
       isAnonymous: v.optional(v.boolean()), // is the user anonymous. do not remove
 
       role: v.optional(roleValidator), // role of the user. do not remove
+      
+      // Custom fields
+      location: v.optional(v.object({
+        latitude: v.number(),
+        longitude: v.number(),
+        displayName: v.optional(v.string()),
+      })),
     }).index("email", ["email"]), // index for the email. do not remove or modify
 
-    // add other tables here
+    news_checks: defineTable({
+      userId: v.id("users"),
+      content: v.string(), // URL or text
+      type: v.union(v.literal("url"), v.literal("text")),
+      result: v.union(v.literal("real"), v.literal("fake"), v.literal("uncertain")),
+      confidence: v.number(), // 0-100
+      sources: v.array(v.string()),
+      analysis: v.string(),
+    }).index("by_user", ["userId"]),
 
-    // tableName: defineTable({
-    //   ...
-    //   // table fields
-    // }).index("by_field", ["field"])
+    image_checks: defineTable({
+      userId: v.id("users"),
+      storageId: v.id("_storage"),
+      probability: v.number(), // 0-100 probability of being morphed
+      analysis: v.string(),
+      isMorphed: v.boolean(),
+    }).index("by_user", ["userId"]),
   },
   {
     schemaValidation: false,
