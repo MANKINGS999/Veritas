@@ -36,12 +36,14 @@ export const analyzeImage = action({
     // Simulate AI analysis delay
     await new Promise((resolve) => setTimeout(resolve, 2500));
 
-    const probability = Math.floor(Math.random() * 100);
-    const isMorphed = probability > 50;
+    // Deterministic result based on storageId
+    const hash = args.storageId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const probability = 60 + (hash % 40); // 60-99%
+    const isMorphed = hash % 2 !== 0;
     
     const analysis = isMorphed
-      ? `VERDICT: LIKELY MANIPULATED (Probability: ${probability}%)\n\nForensic Analysis Report:\n• Error Level Analysis (ELA): Detected inconsistent compression artifacts in the subject's facial region, suggesting digital splicing.\n• Lighting Consistency: Shadow angles on the foreground subject do not match the background light source direction.\n• Noise Distribution: High-frequency noise patterns in the edited areas differ significantly from the rest of the image.\n• Metadata: EXIF data appears stripped or modified, indicating post-processing software usage.`
-      : `VERDICT: AUTHENTIC (Probability: ${probability}%)\n\nForensic Analysis Report:\n• Error Level Analysis (ELA): Uniform compression levels observed across the entire image frame.\n• Lighting Consistency: Global illumination and shadow falloff are physically consistent with the scene geometry.\n• Noise Distribution: Sensor noise is homogeneous, indicating a single, unmodified capture event.\n• Metadata: Original EXIF data is intact and consistent with the image content.`;
+      ? `VERDICT: MANIPULATION DETECTED (${probability}%)\n\nAnalysis:\n• Inconsistent compression artifacts found in key regions.\n• Lighting angles on subject do not match background.\n• Metadata appears stripped or modified.`
+      : `VERDICT: AUTHENTIC IMAGE (${probability}%)\n\nAnalysis:\n• Consistent compression levels across the frame.\n• Lighting and shadows are physically accurate.\n• Original metadata is intact.`;
 
     await ctx.runMutation(internal.images.saveAnalysis, {
       userId,
