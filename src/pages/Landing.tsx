@@ -97,20 +97,6 @@ export default function Landing() {
           </motion.div>
           
           <div className="relative w-full flex flex-col items-center">
-            {/* Logo positioned to emerge from text */}
-            <div className="relative w-[200px] md:w-[260px] h-[180px] -mb-24 z-20 pointer-events-none select-none overflow-hidden flex items-start justify-center">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background z-10" />
-              <img 
-                src="https://harmless-tapir-303.convex.cloud/api/storage/c989714f-70fe-4287-9b3a-f925f590d191" 
-                alt="Veritas Background Logo" 
-                className="w-full h-[180%] object-cover object-top opacity-90 rounded-full mix-blend-screen"
-                style={{ 
-                  maskImage: "linear-gradient(to bottom, black 30%, transparent 90%)", 
-                  WebkitMaskImage: "linear-gradient(to bottom, black 30%, transparent 90%)" 
-                }}
-              />
-            </div>
-
             <h1 className="relative z-10 text-6xl md:text-8xl font-bold tracking-tighter text-white leading-[0.9]">
               <span className="block">Uncover the</span>
               <span className="block bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40">
