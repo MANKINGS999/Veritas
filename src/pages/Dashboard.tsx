@@ -171,13 +171,14 @@ function NewsChecker() {
           </div>
           {history && history.length > 0 && (
             <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+              variant="outline"
+              size="sm"
+              className="h-8 gap-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
               onClick={handleClearHistory}
               title="Clear History"
             >
               <Trash2 className="h-4 w-4" />
+              Clear History
             </Button>
           )}
         </CardHeader>
