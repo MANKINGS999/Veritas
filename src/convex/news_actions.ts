@@ -39,6 +39,8 @@ export const checkNews = action({
     3. If it is a URL, evaluate the domain authority and check if it mimics a legitimate site (typosquatting).
     4. If the content is a claim, check if it is widely reported by multiple independent sources.
     5. Be extremely critical. If a claim is extraordinary and lacks verification from major sources, mark it as "fake" or "uncertain".
+    6. SPECIFICALLY CHECK FOR COMMON HOAXES (e.g., celebrity deaths, currency crashes, health scares).
+    7. If the input is a known false rumor (e.g., "Salman Khan is Dead", "5G causes cancer"), explicitly mark it as FAKE.
 
     OUTPUT FORMAT (JSON ONLY):
     {

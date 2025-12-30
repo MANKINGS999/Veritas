@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, MapPin, ShieldAlert, ShieldCheck, Upload, AlertTriangle, CheckCircle2, Image as ImageIcon, Newspaper } from "lucide-react";
+import { Loader2, MapPin, ShieldAlert, ShieldCheck, Upload, AlertTriangle, CheckCircle2, Image as ImageIcon, Newspaper, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -96,6 +96,7 @@ export default function Dashboard() {
 
 function NewsChecker() {
   const checkNews = useAction(api.news_actions.checkNews);
+  const clearHistory = useMutation(api.news.clearHistory);
   const history = useQuery(api.news.getHistory);
   const [content, setContent] = useState("");
   const [isChecking, setIsChecking] = useState(false);
@@ -117,6 +118,15 @@ function NewsChecker() {
       toast.error("Failed to verify news");
     } finally {
       setIsChecking(false);
+    }
+  };
+
+  const handleClearHistory = async () => {
+    try {
+      await clearHistory();
+      toast.success("History cleared");
+    } catch (error) {
+      toast.error("Failed to clear history");
     }
   };
 
@@ -154,11 +164,24 @@ function NewsChecker() {
       </Card>
 
       <Card className="h-full flex flex-col">
-        <CardHeader>
-          <CardTitle>Recent Checks</CardTitle>
-          <CardDescription>Your verification history</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <div className="space-y-1">
+            <CardTitle>Recent Checks</CardTitle>
+            <CardDescription>Your verification history</CardDescription>
+          </div>
+          {history && history.length > 0 && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+              onClick={handleClearHistory}
+              title="Clear History"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
         </CardHeader>
-        <CardContent className="flex-1">
+        <CardContent className="flex-1 pt-4">
           <ScrollArea className="h-[400px] pr-4">
             <div className="space-y-4">
               {history?.map((item) => (

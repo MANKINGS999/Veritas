@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { internalMutation, query } from "./_generated/server";
+import { internalMutation, mutation, query } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { internal } from "./_generated/api";
 import { vly } from "../lib/vly-integrations";
@@ -16,6 +16,21 @@ export const saveCheck = internalMutation({
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("news_checks", args);
+  },
+});
+
+export const clearHistory = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Unauthorized");
+
+    const checks = await ctx.db
+      .query("news_checks")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .collect();
+
+    await Promise.all(checks.map((check) => ctx.db.delete(check._id)));
   },
 });
 
