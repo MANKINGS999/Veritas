@@ -1,7 +1,8 @@
 import { v } from "convex/values";
-import { action, internalMutation, mutation, query } from "./_generated/server";
+import { action, internalMutation, mutation, query, internalQuery } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { internal } from "./_generated/api";
+import { Id } from "./_generated/dataModel";
 
 export const generateUploadUrl = mutation({
   args: {},
@@ -25,6 +26,13 @@ export const saveAnalysis = internalMutation({
   },
 });
 
+export const getMetadata = internalQuery({
+  args: { storageId: v.id("_storage") },
+  handler: async (ctx, args) => {
+    return await ctx.db.system.get(args.storageId);
+  },
+});
+
 export const analyzeImage = action({
   args: {
     storageId: v.id("_storage"),
@@ -36,9 +44,20 @@ export const analyzeImage = action({
     // Simulate AI analysis delay
     await new Promise((resolve) => setTimeout(resolve, 2500));
 
-    // Deterministic result based on storageId
-    const hash = args.storageId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const probability = 60 + (hash % 40); // 60-99%
+    // Get file metadata to use SHA256 for deterministic results
+    // This ensures the same file uploaded twice gets the same result
+    const metadata = (await ctx.runQuery(internal.images.getMetadata, { storageId: args.storageId })) as { sha256?: string } | null;
+    
+    // Use SHA256 if available, otherwise fallback to storageId
+    const seedString: string = metadata?.sha256 || args.storageId;
+    
+    // Simple hash function for the seed
+    const hash = seedString.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+    
+    // Generate deterministic probability between 60-99%
+    const probability = 60 + (hash % 40); 
+    
+    // Deterministic boolean for isMorphed
     const isMorphed = hash % 2 !== 0;
     
     const analysis = isMorphed
