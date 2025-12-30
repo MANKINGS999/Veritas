@@ -95,7 +95,7 @@ export default function Dashboard() {
 }
 
 function NewsChecker() {
-  const checkNews = useAction(api.news.checkNews);
+  const checkNews = useAction(api.news_actions.checkNews);
   const history = useQuery(api.news.getHistory);
   const [content, setContent] = useState("");
   const [isChecking, setIsChecking] = useState(false);
@@ -113,6 +113,7 @@ function NewsChecker() {
       toast.success("Verification complete");
       setContent("");
     } catch (error) {
+      console.error(error);
       toast.error("Failed to verify news");
     } finally {
       setIsChecking(false);

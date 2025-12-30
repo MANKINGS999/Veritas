@@ -18,6 +18,7 @@ import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as images from "../images.js";
 import type * as news from "../news.js";
+import type * as news_actions from "../news_actions.js";
 import type * as users from "../users.js";
 
 /**
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   images: typeof images;
   news: typeof news;
+  news_actions: typeof news_actions;
   users: typeof users;
 }>;
 export declare const api: FilterApi<
