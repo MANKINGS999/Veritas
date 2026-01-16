@@ -14,102 +14,6 @@ import { Loader2, MapPin, ShieldAlert, ShieldCheck, Upload, AlertTriangle, Check
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Dashboard() {
-  const { user } = useAuth();
-  const updateLocation = useMutation(api.users.updateLocation);
-  const [locationRequested, setLocationRequested] = useState(false);
-
-  useEffect(() => {
-    if (user && !user.location && !locationRequested) {
-      setLocationRequested(true);
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            try {
-              await updateLocation({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                displayName: "Current Location",
-              });
-              toast.success("Location updated successfully");
-            } catch (error) {
-              console.error("Failed to update location", error);
-              toast.error("Failed to save location");
-            }
-          },
-          (error) => {
-            console.error("Error getting location", error);
-            toast.error("Could not access location. Some features may be limited.");
-          }
-        );
-      }
-    }
-  }, [user, locationRequested, updateLocation]);
-
-  return (
-    <div className="min-h-screen bg-background p-6 md:p-12">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <header className="flex justify-between items-center border-b pb-6">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Veritas Dashboard</h1>
-            <p className="text-muted-foreground mt-1">
-              Verify news and analyze images with advanced detection.
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            {user?.location && (
-              <Badge variant="outline" className="gap-2 py-1.5">
-                <MapPin className="h-3 w-3" />
-                Location Active
-              </Badge>
-            )}
-            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-              {user?.name?.[0]?.toUpperCase() || "U"}
-            </div>
-          </div>
-        </header>
-
-        <Tabs defaultValue="news" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 max-w-[800px]">
-            <TabsTrigger value="news" className="gap-2">
-              <Newspaper className="h-4 w-4" />
-              News Verification
-            </TabsTrigger>
-            <TabsTrigger value="images" className="gap-2">
-              <ImageIcon className="h-4 w-4" />
-              Image Analysis
-            </TabsTrigger>
-            <TabsTrigger value="community" className="gap-2">
-              <Users className="h-4 w-4" />
-              Community
-            </TabsTrigger>
-            <TabsTrigger value="profile" className="gap-2">
-              <User className="h-4 w-4" />
-              Profile
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="news" className="space-y-6">
-            <NewsChecker />
-          </TabsContent>
-
-          <TabsContent value="images" className="space-y-6">
-            <ImageChecker />
-          </TabsContent>
-
-          <TabsContent value="community" className="space-y-6">
-            <CommunityFeed />
-          </TabsContent>
-
-          <TabsContent value="profile" className="space-y-6">
-            <ProfileSection />
-          </TabsContent>
-        </Tabs>
-      </div>
-    </div>
-  );
-}
-
 function NewsChecker() {
   const checkNews = useAction(api.news_actions.checkNews);
   const clearHistory = useMutation(api.news.clearHistory);
@@ -634,6 +538,102 @@ function ProfileSection() {
           </Alert>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+export default function Dashboard() {
+  const { user } = useAuth();
+  const updateLocation = useMutation(api.users.updateLocation);
+  const [locationRequested, setLocationRequested] = useState(false);
+
+  useEffect(() => {
+    if (user && !user.location && !locationRequested) {
+      setLocationRequested(true);
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            try {
+              await updateLocation({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                displayName: "Current Location",
+              });
+              toast.success("Location updated successfully");
+            } catch (error) {
+              console.error("Failed to update location", error);
+              toast.error("Failed to save location");
+            }
+          },
+          (error) => {
+            console.error("Error getting location", error);
+            toast.error("Could not access location. Some features may be limited.");
+          }
+        );
+      }
+    }
+  }, [user, locationRequested, updateLocation]);
+
+  return (
+    <div className="min-h-screen bg-background p-6 md:p-12">
+      <div className="max-w-6xl mx-auto space-y-8">
+        <header className="flex justify-between items-center border-b pb-6">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Veritas Dashboard</h1>
+            <p className="text-muted-foreground mt-1">
+              Verify news and analyze images with advanced detection.
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            {user?.location && (
+              <Badge variant="outline" className="gap-2 py-1.5">
+                <MapPin className="h-3 w-3" />
+                Location Active
+              </Badge>
+            )}
+            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+              {user?.name?.[0]?.toUpperCase() || "U"}
+            </div>
+          </div>
+        </header>
+
+        <Tabs defaultValue="news" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4 max-w-[800px]">
+            <TabsTrigger value="news" className="gap-2">
+              <Newspaper className="h-4 w-4" />
+              News Verification
+            </TabsTrigger>
+            <TabsTrigger value="images" className="gap-2">
+              <ImageIcon className="h-4 w-4" />
+              Image Analysis
+            </TabsTrigger>
+            <TabsTrigger value="community" className="gap-2">
+              <Users className="h-4 w-4" />
+              Community
+            </TabsTrigger>
+            <TabsTrigger value="profile" className="gap-2">
+              <User className="h-4 w-4" />
+              Profile
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="news" className="space-y-6">
+            <NewsChecker />
+          </TabsContent>
+
+          <TabsContent value="images" className="space-y-6">
+            <ImageChecker />
+          </TabsContent>
+
+          <TabsContent value="community" className="space-y-6">
+            <CommunityFeed />
+          </TabsContent>
+
+          <TabsContent value="profile" className="space-y-6">
+            <ProfileSection />
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }
