@@ -113,6 +113,17 @@ export const checkNews = action({
         throw new Error("Missing required fields in response");
       }
 
+      // Save the check result to the database
+      await ctx.runMutation(internal.news.saveCheck, {
+        userId,
+        content: args.content,
+        type: args.type,
+        result: jsonResponse.result,
+        confidence: jsonResponse.confidence || 50,
+        sources: jsonResponse.sources || [],
+        analysis: jsonResponse.analysis,
+      });
+
       return jsonResponse;
     } catch (error) {
       console.error("Error in checkNews handler:", error);
