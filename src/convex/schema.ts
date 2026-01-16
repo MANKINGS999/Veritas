@@ -56,6 +56,36 @@ const schema = defineSchema(
       analysis: v.string(),
       isMorphed: v.boolean(),
     }).index("by_user", ["userId"]),
+
+    community_posts: defineTable({
+      userId: v.id("users"),
+      content: v.string(), // URL or text of the news
+      type: v.union(v.literal("url"), v.literal("text")),
+      result: v.union(v.literal("real"), v.literal("fake"), v.literal("uncertain")),
+      confidence: v.number(), // 0-100
+      sources: v.array(v.string()),
+      analysis: v.string(),
+      upvotes: v.number(), // count of upvotes
+      downvotes: v.number(), // count of downvotes
+    }).index("by_user", ["userId"]),
+
+    votes: defineTable({
+      userId: v.id("users"),
+      postId: v.id("community_posts"),
+      voteType: v.union(v.literal("upvote"), v.literal("downvote")),
+    })
+      .index("by_user", ["userId"])
+      .index("by_post", ["postId"])
+      .index("by_user_and_post", ["userId", "postId"]),
+
+    user_stats: defineTable({
+      userId: v.id("users"),
+      reputation: v.number(), // calculated reputation score
+      totalUpvotesGiven: v.number(),
+      totalDownvotesGiven: v.number(),
+      totalPostsCreated: v.number(),
+      credibilityScore: v.number(), // 0-100 based on vote patterns
+    }).index("by_user", ["userId"]),
   },
   {
     schemaValidation: false,

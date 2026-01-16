@@ -60,3 +60,27 @@ export const updateLocation = mutation({
     });
   },
 });
+
+// Set user role (admin only or self-promotion for first user)
+export const setUserRole = mutation({
+  args: {
+    userId: v.id("users"),
+    role: v.union(v.literal("admin"), v.literal("user"), v.literal("member")),
+  },
+  handler: async (ctx, args) => {
+    const currentUserId = await getAuthUserId(ctx);
+    if (!currentUserId) throw new Error("Unauthorized");
+
+    const currentUser = await ctx.db.get(currentUserId);
+
+    // Allow if current user is admin, or if it's the first user promoting themselves
+    const allUsers = await ctx.db.query("users").collect();
+    const isFirstUser = allUsers.length === 1 && currentUserId === args.userId;
+
+    if (currentUser?.role !== "admin" && !isFirstUser) {
+      throw new Error("Admin access required");
+    }
+
+    await ctx.db.patch(args.userId, { role: args.role });
+  },
+});
