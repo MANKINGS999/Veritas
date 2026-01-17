@@ -1,133 +1,203 @@
-"use node";
 import { v } from "convex/values";
-import { action } from "./_generated/server";
+import { mutation } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { internal } from "./_generated/api";
-import { vly } from "../lib/vly-integrations";
 
-export const checkNews = action({
+// Simple rule-based news verification
+function analyzeNewsContent(content: string) {
+  const lowerContent = content.toLowerCase().trim();
+
+  // Fake news indicators
+  const fakeIndicators = [
+    'shocking', 'unbelievable', 'miracle cure', 'doctors hate', 'one weird trick',
+    'you won\'t believe', 'conspiracy', 'cover up', 'they don\'t want you to know',
+    'secret revealed', 'banned by', 'government hiding', 'big pharma', 'illuminati'
+  ];
+
+  // Clickbait patterns
+  const clickbaitPatterns = [
+    'number 7 will shock you', 'what happened next', 'the reason why',
+    'this is why', 'you need to see', 'gone wrong', 'goes viral'
+  ];
+
+  // Reliable source mentions
+  const reliableSources = [
+    'reuters', 'associated press', 'ap news', 'bbc', 'cnn', 'nyt', 'new york times',
+    'washington post', 'the guardian', 'nature', 'science', 'who', 'un', 'government',
+    'official', 'peer-reviewed', 'study published', 'research shows'
+  ];
+
+  // Medical/scientific red flags
+  const scienceRedFlags = [
+    'cure for cancer', 'cure for all', 'scientists discover cure', 'breakthrough overnight',
+    'instant cure', 'miracle treatment', 'doctors amazed', 'lose weight fast'
+  ];
+
+  // Celebrity death hoaxes
+  const celebrityDeathPatterns = [
+    'is dead', 'has died', 'passes away', 'found dead', 'tragic death', 'died suddenly'
+  ];
+
+  let fakeScore = 0;
+  let realScore = 0;
+  let flags: string[] = [];
+
+  // Check for fake indicators
+  fakeIndicators.forEach(indicator => {
+    if (lowerContent.includes(indicator)) {
+      fakeScore += 15;
+      flags.push(`Sensational language detected: "${indicator}"`);
+    }
+  });
+
+  // Check for clickbait
+  clickbaitPatterns.forEach(pattern => {
+    if (lowerContent.includes(pattern)) {
+      fakeScore += 10;
+      flags.push(`Clickbait pattern: "${pattern}"`);
+    }
+  });
+
+  // Check for science red flags
+  scienceRedFlags.forEach(flag => {
+    if (lowerContent.includes(flag)) {
+      fakeScore += 20;
+      flags.push(`Suspicious medical claim: "${flag}"`);
+    }
+  });
+
+  // Check for celebrity death hoax patterns
+  let hasCelebrityDeath = false;
+  celebrityDeathPatterns.forEach(pattern => {
+    if (lowerContent.includes(pattern)) {
+      hasCelebrityDeath = true;
+    }
+  });
+
+  if (hasCelebrityDeath && !reliableSources.some(source => lowerContent.includes(source))) {
+    fakeScore += 25;
+    flags.push('Unverified celebrity death claim');
+  }
+
+  // Check for reliable sources
+  reliableSources.forEach(source => {
+    if (lowerContent.includes(source)) {
+      realScore += 15;
+      flags.push(`Reliable source mentioned: ${source}`);
+    }
+  });
+
+  // URL analysis
+  if (content.startsWith('http')) {
+    try {
+      const url = new URL(content);
+      const domain = url.hostname.toLowerCase();
+
+      // Check for suspicious domains
+      if (domain.includes('fake') || domain.includes('satire') || domain.includes('parody')) {
+        fakeScore += 30;
+        flags.push('Suspicious domain name');
+      }
+
+      // Check for typosquatting
+      const trustedDomains = ['bbc.com', 'cnn.com', 'nytimes.com', 'reuters.com', 'theguardian.com'];
+      trustedDomains.forEach(trusted => {
+        if (domain.includes(trusted.replace('.com', '')) && !domain.includes(trusted)) {
+          fakeScore += 25;
+          flags.push('Possible typosquatting of trusted domain');
+        }
+      });
+
+      // Trusted domains
+      if (trustedDomains.some(td => domain.includes(td))) {
+        realScore += 20;
+        flags.push('Trusted domain');
+      }
+    } catch (e) {
+      flags.push('Invalid URL format');
+    }
+  }
+
+  // Check for balanced writing
+  const hasQuotes = content.includes('"') || content.includes("'");
+  const hasNumbers = /\d+/.test(content);
+  const hasSourceAttribution = lowerContent.includes('according to') ||
+                               lowerContent.includes('reported by') ||
+                               lowerContent.includes('source:');
+
+  if (hasQuotes && hasSourceAttribution) {
+    realScore += 10;
+    flags.push('Contains quotes and source attribution');
+  }
+
+  if (hasNumbers && hasSourceAttribution) {
+    realScore += 5;
+    flags.push('Contains specific data with sources');
+  }
+
+  // All caps detection (common in fake news)
+  const upperCaseWords = content.match(/[A-Z]{4,}/g);
+  if (upperCaseWords && upperCaseWords.length > 3) {
+    fakeScore += 10;
+    flags.push('Excessive use of capital letters');
+  }
+
+  // Multiple exclamation marks
+  const exclamationCount = (content.match(/!/g) || []).length;
+  if (exclamationCount > 3) {
+    fakeScore += 10;
+    flags.push('Excessive exclamation marks');
+  }
+
+  // Calculate final score
+  const netScore = realScore - fakeScore;
+  let result: "real" | "fake" | "uncertain";
+  let confidence: number;
+  let sources: string[] = [];
+
+  if (netScore > 20) {
+    result = "real";
+    confidence = Math.min(85, 60 + netScore);
+    sources = ["Pattern Analysis", "Source Verification"];
+  } else if (netScore < -20) {
+    result = "fake";
+    confidence = Math.min(90, 60 + Math.abs(netScore));
+    sources = ["Pattern Analysis", "Red Flag Detection"];
+  } else {
+    result = "uncertain";
+    confidence = 50;
+    sources = ["Pattern Analysis"];
+  }
+
+  const analysis = flags.length > 0
+    ? `Analysis:\n${flags.map(f => `• ${f}`).join('\n')}\n\nVerdict: This content ${result === 'fake' ? 'shows multiple indicators of misinformation' : result === 'real' ? 'appears credible based on source indicators' : 'requires further verification from trusted sources'}.`
+    : `Basic analysis complete. ${result === 'uncertain' ? 'Unable to determine credibility with certainty. Cross-check with trusted news sources.' : ''}`;
+
+  return { result, confidence, sources, analysis };
+}
+
+export const checkNews = mutation({
   args: {
     content: v.string(),
     type: v.union(v.literal("url"), v.literal("text")),
   },
-  handler: async (ctx, args): Promise<{ result: "real" | "fake" | "uncertain"; analysis: string }> => {
+  handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Unauthorized");
 
-    // Get user location to determine relevant sources context
-    const location = (await ctx.runQuery(internal.users.getUserLocation, { userId })) as { latitude: number; longitude: number } | null | undefined;
-    
-    let locationContext = "Global";
-    if (location) {
-      const { latitude, longitude } = location;
-      if (latitude >= 8 && latitude <= 37 && longitude >= 68 && longitude <= 97) locationContext = "India";
-      else if (latitude >= 24 && latitude <= 49 && longitude >= -125 && longitude <= -66) locationContext = "USA";
-      else if (latitude >= 36 && latitude <= 71 && longitude >= -10 && longitude <= 40) locationContext = "Europe";
-    }
+    // Use rule-based analysis
+    const analysisResult = analyzeNewsContent(args.content);
 
-    // Specific overrides for user testing
-    const lowerContent = args.content.toLowerCase().trim();
-    let overrideResult = null;
-    
-    // Check for specific phrases provided by user
-    if (lowerContent.includes("salman khan is dead")) {
-      overrideResult = { result: "fake", analysis: "This is a known hoax. Salman Khan is alive and well." };
-    } else if (lowerContent.includes("dollar hits 100 rupee")) {
-      overrideResult = { result: "fake", analysis: "False claim. The USD to INR exchange rate is currently around 83-84, not 100." };
-    } else if (lowerContent.includes("5g network causes cancer")) {
-      overrideResult = { result: "fake", analysis: "False. Extensive research by WHO and other health organizations has found no evidence that 5G causes cancer." };
-    } else if (lowerContent.includes("first femlae prime minister of bangladesh passes away") || lowerContent.includes("first female prime minister of bangladesh passes away")) {
-      overrideResult = { result: "real", analysis: "Verified. Reports confirm the passing of the first female Prime Minister of Bangladesh." };
-    } else if (lowerContent.includes("silver rates fall 21,000")) {
-      overrideResult = { result: "real", analysis: "Verified. Market data indicates a significant drop in silver rates (approx 21,000 rupees per kg)." };
-    }
+    // Save to database
+    await ctx.db.insert("news_checks", {
+      userId,
+      content: args.content,
+      type: args.type,
+      result: analysisResult.result,
+      confidence: analysisResult.confidence,
+      sources: analysisResult.sources,
+      analysis: analysisResult.analysis,
+    });
 
-    if (overrideResult) {
-       await ctx.runMutation(internal.news.saveCheck, {
-        userId,
-        content: args.content,
-        type: args.type,
-        result: overrideResult.result as "real" | "fake" | "uncertain",
-        confidence: 100,
-        sources: ["Verified Database"],
-        analysis: overrideResult.analysis,
-      });
-      return {
-        result: overrideResult.result as "real" | "fake" | "uncertain",
-        analysis: overrideResult.analysis,
-      };
-    }
-
-    const prompt = `
-    You are Veritas, a Senior Editor and Fact-Checking AI at a global news desk.
-    Your task is to rigorously verify the credibility of the following news content or URL.
-
-    INPUT:
-    Content/URL: "${args.content}"
-    User Context: ${locationContext}
-
-    INSTRUCTIONS:
-    1. Cross-reference this information against established, high-trust news networks (e.g., Reuters, AP, BBC, CNN, Al Jazeera, NYT, Washington Post, The Hindu, etc.).
-    2. Analyze for sensationalism, logical fallacies, or signs of manipulation.
-    3. If it is a URL, evaluate the domain authority and check if it mimics a legitimate site (typosquatting).
-    4. If the content is a claim, check if it is widely reported by multiple independent sources.
-    5. Be extremely critical. If a claim is extraordinary and lacks verification from major sources, mark it as "fake" or "uncertain".
-    6. SPECIFICALLY CHECK FOR COMMON HOAXES (e.g., celebrity deaths, currency crashes, health scares).
-    7. If the input is a known false rumor (e.g., "Salman Khan is Dead", "5G causes cancer"), explicitly mark it as FAKE.
-
-    OUTPUT FORMAT (JSON ONLY):
-    {
-      "result": "real" | "fake" | "uncertain",
-      "confidence": number (0-100),
-      "sources": ["Source 1", "Source 2", ...],
-      "analysis": "Detailed analysis paragraph. Cite specific discrepancies or confirmations. Use bullet points for clarity."
-    }
-    `;
-
-    try {
-      const completion = await vly.ai.completion({
-        model: "gpt-4o",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.1, // Low temperature for deterministic, factual responses
-      });
-
-      const responseContent = completion.data?.choices[0]?.message?.content;
-      
-      if (!responseContent) {
-        throw new Error("Failed to get analysis from AI");
-      }
-
-      // Clean up response content (remove markdown code blocks if present)
-      const cleanContent = responseContent.replace(/```/g, "").replace(/```/g, "").trim();
-
-      // Extract JSON from response
-      const jsonMatch = cleanContent.match(/(?:\{.*\})|(?:\[\{.*\}\].*?)/);
-      if (!jsonMatch) {
-        throw new Error("Failed to parse JSON from response");
-      }
-
-      const jsonResponse = JSON.parse(jsonMatch[0]);
-
-      // Validate required fields
-      if (!jsonResponse.result || !jsonResponse.analysis) {
-        throw new Error("Missing required fields in response");
-      }
-
-      // Save the check result to the database
-      await ctx.runMutation(internal.news.saveCheck, {
-        userId,
-        content: args.content,
-        type: args.type,
-        result: jsonResponse.result,
-        confidence: jsonResponse.confidence || 50,
-        sources: jsonResponse.sources || [],
-        analysis: jsonResponse.analysis,
-      });
-
-      return jsonResponse;
-    } catch (error) {
-      console.error("Error in checkNews handler:", error);
-      throw new Error("Failed to process news content");
-    }
+    return analysisResult;
   },
 });

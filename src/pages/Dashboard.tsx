@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
 function NewsChecker() {
-  const checkNews = useAction(api.news_actions.checkNews);
+  const checkNews = useMutation(api.news_actions.checkNews);
   const clearHistory = useMutation(api.news.clearHistory);
   const postToCommunity = useMutation(api.community.postToCommunity);
   const history = useQuery(api.news.getHistory);
